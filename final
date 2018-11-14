@@ -1,0 +1,112 @@
+// Helper functions for synthesizing music for use in CS50x
+
+#include <cs50.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include "helpers.h"
+
+// Converts a fraction formatted as X/Y to eighths
+int duration(string fraction)
+{
+    // Initialize numerator and denominator
+    char num = (fraction[0]) - 48;
+    char den = (fraction[2]) - 48;
+
+    if (den == 8)
+    {
+        return num;
+    }
+    if (den == 4)
+    {
+        return num * 2;
+    }
+    if (den == 2)
+    {
+        return num * 4;
+    }
+    if (den == 1)
+    {
+        return num * 8;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// Calculates frequency (in Hz) of a note
+int frequency(string note)
+{
+
+// Initialize variables
+    int noteoff = 0;
+    int acc = 0;
+    int totoff;
+    char octoff = note[strlen(note) - 1];
+    octoff -= 52;
+
+// Check the letter of the note
+    if (note[0] == 'C')
+    {
+        noteoff = -9;
+    }
+    if (note[0] == 'D')
+    {
+        noteoff = -7;
+    }
+    if (note[0] == 'E')
+    {
+        noteoff = -5;
+    }
+    if (note[0] == 'F')
+    {
+        noteoff = -4;
+    }
+    if (note[0] == 'G')
+    {
+        noteoff = -2;
+    }
+    if (note[0] == 'A')
+    {
+        noteoff = 0;
+    }
+    if (note[0] == 'B')
+    {
+        noteoff = 2;
+    }
+
+// Check for accidentals
+    if (note[1] == '#')
+    {
+        acc = 1;
+    }
+    if (note[1] == 'b')
+    {
+        acc = -1;
+    }
+
+// Add all offsets together to get the total offset
+    totoff = (octoff * 12) + (noteoff) + (acc);
+
+// Initialize over and power
+    float over = totoff/12.0;
+    float power = pow(2, over);
+
+// Use power to calculate the frequency
+    int freq = round(440 * power);
+    return freq;
+}
+// Determines whether a string represents a rest
+bool is_rest(string s)
+{
+    if (strcmp(s, "") == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
